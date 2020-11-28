@@ -18,7 +18,7 @@
 
     <AssemblyName>Discord.Addons.Interactive</AssemblyName>
 
-    <Version>1.1.0</Version>
+    <Version>1.1.1</Version>
 
     <Company>Shukashuu</Company>
 
@@ -34,8 +34,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Discord.Net.Commands" Version="2.3.0-dev-20200627.3" />
-    <PackageReference Include="Discord.Net.WebSocket" Version="2.3.0-dev-20200627.3" />
+    <PackageReference Include="Discord.Net.Commands" Version="2.3.0-dev-20201126.1" />
+    <PackageReference Include="Discord.Net.WebSocket" Version="2.3.0-dev-20201126.1" />
   </ItemGroup>
 
 </Project>
