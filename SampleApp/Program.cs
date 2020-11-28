@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 
 namespace SampleApp
 {
@@ -14,9 +15,16 @@ namespace SampleApp
         private static DiscordSocketClient _client;
         private static CommandService _commands;
         private static IServiceProvider _services;
+        private static IConfigurationRoot _configuration;
         
         public static async Task Main(string[] args)
         {
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json");
+
+            _configuration = builder.Build();
+            
             _services = ConfigureServices();
             
             _client = _services.GetRequiredService<DiscordSocketClient>();
@@ -28,7 +36,7 @@ namespace SampleApp
                 return Task.CompletedTask;
             };
 
-            var token = File.ReadAllText("token.ignore");
+            var token = _configuration["Token"];
             
             await _client.LoginAsync(TokenType.Bot, token);
             await _client.StartAsync();
@@ -48,6 +56,7 @@ namespace SampleApp
             return new ServiceCollection()
                 .AddSingleton(client)
                 .AddSingleton(commands)
+                .AddSingleton(_configuration)
                 .AddSingleton<InteractiveService>()
                 .BuildServiceProvider();
         }
@@ -58,9 +67,9 @@ namespace SampleApp
                 || !(message.Author is IGuildUser guildUser)
                 || guildUser.IsBot)
             {
-                return; 
+                return;
             }
-            
+
             var argPos = 0;
             if (message.HasStringPrefix("!!", ref argPos))
             {
